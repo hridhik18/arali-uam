@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: arali-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: arali
+      POSTGRES_PASSWORD: arali
+      POSTGRES_DB: arali
+    volumes:
+      - arali_pg:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U arali -d arali"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  arali_pg:
